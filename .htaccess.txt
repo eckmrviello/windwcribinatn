@@ -1,0 +1,20 @@
+# Prevent directory browsing
+Options -Indexes
+
+# Prevent access to sensitive files
+<FilesMatch "\.(php|sql|log|txt|json|env)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Prevent hotlinking
+RewriteEngine On
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https://(www\.)?yourdomain\.com/ [NC]
+RewriteRule \.(jpg|jpeg|png|gif|css|js)$ - [F]
+
+# Add security headers
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set X-XSS-Protection "1; mode=block"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
